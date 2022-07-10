@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lsnp Unlocker Admin</title>
+    <link rel="shortcut icon" href="lsnp_3Hn_icon.ico">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="signup" id="signup">
+        <div class="signup-container">
+             <div class="mb-5"> 
+                <h6>Register Account</h6>
+                <input type="text" placeholder="Username" id="userInp" class="btn"> <br>
+                <input type="text" placeholder="Email" id="emailInp" class="btn"> <br>
+                <input type="password" placeholder="Password" id="passInp" class="btn"><br>
+                <input type="text" placeholder="Region" id="regionInp" class="btn" > <br>
+                <input type="text" placeholder="Township" id="townInp" class="btn"><br>
+                <input type="text" placeholder="Phone Number" id="phoneInp" class="btn" ><br>
+                <button type="text" id="sub_btn" >Sign Up</button>
+
+             </div>
+        </div>
+    </div>
+
+
+    <script type="module">    
+        // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.3/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.3/firebase-analytics.js";
+    
+    const firebaseConfig = {
+    apiKey: "AIzaSyDCTpsx1E-uFTNL15U9PdabU8a60aw_M4w",
+    authDomain: "registervb-d1c2b.firebaseapp.com",
+    databaseURL: "https://registervb-d1c2b-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "registervb-d1c2b",
+    storageBucket: "registervb-d1c2b.appspot.com",
+    messagingSenderId: "82103618386",
+    appId: "1:82103618386:web:bc6aff11176a0524ae488b",
+    measurementId: "G-9Q7X1VY9JX"
+    };
+    
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    
+           import{ getDatabase , ref , set , child , get , update , remove} 
+                from "https://www.gstatic.com/firebasejs/9.8.3/firebase-database.js";
+                const db = getDatabase();
+    
+      // the references
+    
+      const username = document.getElementById("userInp");
+      const email = document.getElementById("emailInp");
+      const pass = document.getElementById("passInp");
+      const region = document.getElementById("regionInp");
+      const township = document.getElementById("townInp");
+      const phone = document.getElementById("phoneInp");
+      const submit = document.getElementById("sub_btn");
+      
+    
+    // validation 
+     function  isEmptyOrSpaces(str) {
+         return str === null || str.match (/^ *$/) !== null;
+     }
+    
+     function Validation(){
+         let emailregex = /^[a-zA-Z0-9]+@(gmail|yahoo|outlook)\.com$/;    
+         if(isEmptyOrSpaces(township.value) || isEmptyOrSpaces(email.value) || isEmptyOrSpaces(username.value)||
+         isEmptyOrSpaces(pass.value)|| isEmptyOrSpaces(region.value)||isEmptyOrSpaces(phone.value)) {
+             alert("you cannotleft any field empty");
+             return false;
+         }                   
+         if(!emailregex.test(email.value)) {
+             alert("Enter a valid email");
+             return false;
+         }
+         return true;
+     }
+            // Register user to firebase //
+             
+            function RegisterUser(){
+               if(!Validation()){
+                   return;
+               };
+                const dbRef = ref(db);
+    
+                get(child(dbRef , "users/" +  username.value)).then((snapshot)=> {
+                    if (snapshot.exists()) {
+                        alert("Account Already Exist!");
+                    }else {
+                        set(ref(db, "users/" + username.value),{
+                            username:username.value,
+                            Email: email.value, 
+                            password: pass.value,                          
+                            Region:region.value,
+                            Township:township.value,                      
+                            Phone_Number:phone.value
+                        })
+                        .then(()=>{
+                            alert("User Account Created successfully !!");
+                        })
+                        .catch((error)=>{
+                            alert("error"+ error);
+                        })
+                    }
+                })
+            }
+  
+              // Click Register Btn
+             submit.addEventListener('click', RegisterUser);
+     </script>
+    
+   
+
+</body>
+</html>
